@@ -5,6 +5,8 @@ namespace Nanigans\SingleTableInheritance\Tests;
 use Illuminate\Support\Facades\DB;
 use Nanigans\SingleTableInheritance\Exceptions\SingleTableInheritanceException;
 use Nanigans\SingleTableInheritance\Exceptions\SingleTableInheritanceInvalidAttributesException;
+use Nanigans\SingleTableInheritance\Tests\Fixtures\Animal;
+use Nanigans\SingleTableInheritance\Tests\Fixtures\AnimalType;
 use Nanigans\SingleTableInheritance\Tests\Fixtures\Bike;
 use Nanigans\SingleTableInheritance\Tests\Fixtures\Car;
 use Nanigans\SingleTableInheritance\Tests\Fixtures\MotorVehicle;
@@ -13,6 +15,7 @@ use Nanigans\SingleTableInheritance\Tests\Fixtures\Vehicle;
 use Nanigans\SingleTableInheritance\Tests\Fixtures\Video;
 use Nanigans\SingleTableInheritance\Tests\Fixtures\VideoType;
 use Nanigans\SingleTableInheritance\Tests\Fixtures\MP4Video;
+use Nanigans\SingleTableInheritance\Tests\Fixtures\VideoTypeEnum;
 
 /**
  * Class SingleTableInheritanceTraitModelMethodsTest
@@ -231,6 +234,17 @@ class SingleTableInheritanceTraitModelMethodsTest extends TestCase {
 
     $this->assertInstanceOf('Nanigans\SingleTableInheritance\Tests\Fixtures\MP4Video', $newVideo);
   }
+
+    public function testNewFromBuilderWithPHPEnum() {
+        $animal = new Animal();
+        $attr = [
+            'type' => AnimalType::CAT->value
+        ];
+
+        $newAnimal = $animal->newFromBuilder($attr);
+
+        $this->assertInstanceOf('Nanigans\SingleTableInheritance\Tests\Fixtures\Cat', $newAnimal);
+    }
   
 
   public function testNewFromBuilderDefersToOriginalIfTypeIsUndefined() {

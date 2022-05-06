@@ -56,7 +56,7 @@ trait SingleTableInheritanceTrait {
     // Check if the calledClass is a leaf of the hierarchy. singleTableSubclasses will be inherited from the parent class
     // so its important we check for the tableType first otherwise we'd infinitely recurse.
     if (property_exists($calledClass, 'singleTableType')) {
-      $classType = static::$singleTableType;
+      $classType = static::getSingleTableType();
       $typeMap[$classType] = $calledClass;
     }
     if (property_exists($calledClass, 'singleTableSubclasses')) {
@@ -75,6 +75,16 @@ trait SingleTableInheritanceTrait {
     self::$singleTableTypeMap[$calledClass] = $typeMap;
 
     return $typeMap;
+  }
+
+  private static function getSingleTableType($class = null) {
+      if ($class == null) $class = static::class;
+      if (property_exists($class, 'singleTableType'))  {
+          $classType = $class::$singleTableType;
+          if (is_string($classType) || is_int($classType)) return $classType;
+          if (enum_exists($classType::class)) return $classType->value;
+      }
+      return null;
   }
 
   /**
@@ -155,7 +165,7 @@ trait SingleTableInheritanceTrait {
    */
   public function setSingleTableType() {
     $modelClass = get_class($this);
-    $classType = property_exists($modelClass, 'singleTableType') ? $modelClass::$singleTableType : null;
+    $classType = static::getSingleTableType($modelClass);
     if ($classType !== null) {
       if ($this->hasGetMutator(static::$singleTableTypeField)) {
         $this->{static::$singleTableTypeField} = $this->mutateAttribute(static::$singleTableTypeField, $classType);

@@ -5,26 +5,21 @@ namespace Nanigans\SingleTableInheritance\Tests\Fixtures;
 use Nanigans\SingleTableInheritance\SingleTableInheritanceTrait;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
-class Video extends Eloquent {
+class Animal extends Eloquent {
 
   use SingleTableInheritanceTrait;
 
-  protected $table = "videos";
+  protected $table = "animals";
 
   protected static $singleTableTypeField = 'type';
 
   protected static $singleTableSubclasses = [
-    'Nanigans\SingleTableInheritance\Tests\Fixtures\MP4Video',
-    'Nanigans\SingleTableInheritance\Tests\Fixtures\WMVVideo',
+    'Nanigans\SingleTableInheritance\Tests\Fixtures\Cat',
+    'Nanigans\SingleTableInheritance\Tests\Fixtures\Dog',
   ];
 }
 
-class VideoType{
-  const MP4 = 1;
-  const WMV = 2;
-}
-
-enum VideoTypeEnum: string {
-    case MP4 = "mp4";
-    case WMV = "wmv";
+enum AnimalType: string {
+    case CAT = "cat";
+    case DOG = "dog";
 }
